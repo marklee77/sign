@@ -1,0 +1,5 @@
+{%- macro message(textcolor, textsize, left, top, class='message') %}
+    <div style="position: absolute; color: {{ textcolor }}; 
+        font-size: {{ textsize }}; top: {{ top }}; left: {{ left }};"
+        >{{ caller() }}</div>
+{% endmacro -%}

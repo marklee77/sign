@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="refresh" 
+      content="{{ resource.meta.interval|default(default_interval) }}" />
+    <meta charset="UTF-8" />
+    <meta name="author" content="{{ resource.meta.author }}" />
+    <title>{% block title %}{{ resource.meta.title }}{% endblock %}</title>
+    <style type="text/css">
+      body {
+        {%- if resource.meta.bgimage %}
+          background-image: url(img/{{ resource.meta.bgimage }});
+        {% endif -%}
+        background-color: white;
+        background-repeat: no-repeat;
+        background-position: left top;
+        font-family: Arial, Helvetica, Bitstream Vera Sans, sans-serif; 
+        width: {{ resource.meta.page_width }};
+        height: {{ resource.meta.page_height }};
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/jquery.innerfade.min.js"></script>
+    {%- block main %}
+    {% endblock main -%}
+
+  </body>
+</html>

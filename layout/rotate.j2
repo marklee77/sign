@@ -1,0 +1,43 @@
+{%- macro rotate(framesets, seconds, width, height, left, top, class='map') -%}
+  <iframe id="rotate0" class="rotate" src="" style="
+    position: absolute; width: {{ width }}; height: {{ height }}; top: {{ top }}; left: {{ left }}; border: 0; overflow: hidden;" 
+    onload="$('#rotate0').hide();">{{ caller() }}</iframe>
+  <iframe id="rotate1" class="rotate" src="" style="
+    position: absolute; width: {{ width }}; height: {{ height }}; top: {{ top }}; left: {{ left }}; border: 0; overflow: hidden;" 
+    onload="$('#rotate1').hide();">{{ caller() }}</iframe>
+  <script type="text/javascript">
+  <!--
+  rotateUrls = new Array();
+  {% for frameset in framesets %}
+  <?php 
+      $response = file_get_contents("{{ frameset }}");
+      $url_list = preg_split('/\s+/', trim($response));
+      foreach($url_list as $url) {
+          echo "rotateUrls.push(\"" . $url . "\")\n";
+      }
+  ?>
+  {% endfor %}
+  rotateIndex = Math.floor(Math.random() * rotateUrls.length);
+  var i = 0, j = 1;
+  $('#rotate0').attr('src', rotateUrls[rotateIndex]);
+  function rotateContent() {
+      rotateIndex = (rotateIndex + 1 + 
+                     Math.floor(Math.random() * (rotateUrls.length - 1))
+                    ) % rotateUrls.length;
+      j = (i + 1) % 2;
+      $('#rotate' + j).css('z-index', 0);
+      document.getElementById('rotate' + i).contentWindow.postMessage('start', '*');
+      $('#rotate' + i).css('z-index', 1);
+      $('#rotate' + i).fadeIn(1000, function () {
+          $('#rotate' + j).hide();
+          $('#rotate' + j).attr('src', rotateUrls[rotateIndex]);
+          i = j;
+      });
+  } 
+  setTimeout(function () {
+      rotateContent();
+      setInterval(rotateContent, {{ seconds }} * 1000);
+  } , 2000);
+  //-->
+  </script>
+{%- endmacro -%}
