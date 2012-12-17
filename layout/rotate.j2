@@ -17,21 +17,22 @@
       }
   ?>
   {% endfor %}
-  rotateIndex = Math.floor(Math.random() * rotateUrls.length);
-  var i = 0, j = 1;
-  $('#rotate0').attr('src', rotateUrls[rotateIndex]);
+  rotateUrlIndex = Math.floor(Math.random() * rotateUrls.length);
+  $('#rotate0').hide();
+  $('#rotate0').attr('src', rotateUrls[rotateUrlIndex]);
+  var rotateFrameIndex = 0;
   function rotateContent() {
-      rotateIndex = (rotateIndex + 1 + 
-                     Math.floor(Math.random() * (rotateUrls.length - 1))
-                    ) % rotateUrls.length;
-      j = (i + 1) % 2;
-      $('#rotate' + j).css('z-index', 0);
-      document.getElementById('rotate' + i).contentWindow.postMessage('start', '*');
-      $('#rotate' + i).css('z-index', 1);
-      $('#rotate' + i).fadeIn(1000, function () {
-          $('#rotate' + j).hide();
-          $('#rotate' + j).attr('src', rotateUrls[rotateIndex]);
-          i = j;
+      rotateUrlIndex = (rotateUrlIndex + 1 + 
+                        Math.floor(Math.random() * (rotateUrls.length - 1))
+                       ) % rotateUrls.length;
+      otherFrameIndex = (rotateFrameIndex + 1) % 2;
+      $('#rotate' + otherFrameIndex).css('z-index', 0);
+      $('#rotate' + rotateFrameIndex).css('z-index', 1);
+      document.getElementById('rotate' + rotateFrameIndex).contentWindow.postMessage('start', '*');
+      $('#rotate' + rotateFrameIndex).fadeIn(1000, function () {
+          $('#rotate' + otherFrameIndex).hide();
+          $('#rotate' + otherFrameIndex).attr('src', rotateUrls[rotateUrlIndex]);
+          rotateFrameIndex = otherFrameIndex;
       });
   } 
   setTimeout(function () {

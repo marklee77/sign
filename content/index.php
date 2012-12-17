@@ -24,7 +24,7 @@ bgimage: engcomp.png
     'rotate/gourma/frames.txt', 
     'rotate/jenkins/frames.txt',
     'http://www.cranfield.ac.uk/~toby.breckon/amac_sign/frames.txt' ], 
-    seconds='30', width='840px', height='650px', left='950px', top='235px') %}
+    seconds='20', width='840px', height='650px', left='950px', top='235px') %}
 {% endcall -%}
 
 {%- call clock(textcolor='blue', textsize='48pt', width='840px', height='400px', left='950px', top='900px') %}
