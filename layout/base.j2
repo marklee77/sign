@@ -8,13 +8,11 @@
     <title>{% block title %}{{ resource.meta.title }}{% endblock %}</title>
     <style type="text/css">
       body {
-        {%- if resource.meta.bgimage %}
-          background-image: url(img/{{ resource.meta.bgimage }});
-        {% endif -%}
-        background-color: white;
-        background-repeat: no-repeat;
-        background-position: left top;
+        {% if resource.meta.background %}
+            background: {{ resource.meta.background }};
+        {% endif %}
         font-family: Arial, Helvetica, Bitstream Vera Sans, sans-serif; 
+        font-size: 18pt;
         width: {{ resource.meta.page_width }};
         height: {{ resource.meta.page_height }};
         overflow: hidden;

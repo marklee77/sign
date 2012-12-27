@@ -5,7 +5,7 @@ plugins:
     - hyde.ext.plugins.auto_extend.AutoExtendPlugin
 context:
   data:
-    default_interval: 600
+    default_interval: 3600
     
 meta:
     page_width: "1920px"

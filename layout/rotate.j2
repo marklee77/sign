@@ -1,43 +1,56 @@
-{%- macro rotate(framesets, seconds, width, height, left, top, class='map') -%}
-  <iframe id="rotate0" class="rotate" src="" style="
+{%- macro rotate(pagesets, pages, seconds, allowrepeat=false, width, height, left, top, name='', class='map') -%}
+  <iframe id="rotate_{{ name }}_0" class="rotate" src="" style="
     position: absolute; width: {{ width }}; height: {{ height }}; top: {{ top }}; left: {{ left }}; border: 0; overflow: hidden;" 
-    onload="$('#rotate0').hide();">{{ caller() }}</iframe>
-  <iframe id="rotate1" class="rotate" src="" style="
+    onload="$('#rotate_{{ name }}_0').hide();">{{ caller() }}</iframe>
+  <iframe id="rotate_{{ name }}_1" class="rotate" src="" style="
     position: absolute; width: {{ width }}; height: {{ height }}; top: {{ top }}; left: {{ left }}; border: 0; overflow: hidden;" 
-    onload="$('#rotate1').hide();">{{ caller() }}</iframe>
+    onload="$('#rotate_{{ name }}_1').hide();">{{ caller() }}</iframe>
   <script type="text/javascript">
   <!--
-  rotateUrls = new Array();
-  {% for frameset in framesets %}
+  rotateUrls_{{ name }} = new Array();
   <?php 
-      $response = file_get_contents("{{ frameset }}");
-      $url_list = preg_split('/\s+/', trim($response));
-      foreach($url_list as $url) {
-          echo "rotateUrls.push(\"" . $url . "\")\n";
+      $rotateUrls = array(); 
+      {% for pageset in pagesets %}
+          $response = file_get_contents("{{ pageset }}");
+          $url_list = preg_split('/\s+/', trim($response));
+          foreach($url_list as $url) {
+              $rotateUrls[] = $url;
+          }
+      {% endfor %}
+      {% for page in pages %}
+          $rotateUrls[] = "{{ page }}";
+      {% endfor %}
+      foreach($rotateUrls as $url) {
+          echo "rotateUrls_{{ name }}.push(\"" . $url . "\")\n";
       }
   ?>
-  {% endfor %}
-  rotateUrlIndex = Math.floor(Math.random() * rotateUrls.length);
-  $('#rotate0').hide();
-  $('#rotate0').attr('src', rotateUrls[rotateUrlIndex]);
-  var rotateFrameIndex = 0;
-  function rotateContent() {
-      rotateUrlIndex = (rotateUrlIndex + 1 + 
-                        Math.floor(Math.random() * (rotateUrls.length - 1))
-                       ) % rotateUrls.length;
-      otherFrameIndex = (rotateFrameIndex + 1) % 2;
-      $('#rotate' + otherFrameIndex).css('z-index', 0);
-      $('#rotate' + rotateFrameIndex).css('z-index', 1);
-      document.getElementById('rotate' + rotateFrameIndex).contentWindow.postMessage('start', '*');
-      $('#rotate' + rotateFrameIndex).fadeIn(1000, function () {
-          $('#rotate' + otherFrameIndex).hide();
-          $('#rotate' + otherFrameIndex).attr('src', rotateUrls[rotateUrlIndex]);
-          rotateFrameIndex = otherFrameIndex;
+  rotateUrlIndex_{{ name }} = Math.floor(Math.random() * rotateUrls_{{ name }}.length);
+  $('#rotate_{{ name }}_0').hide();
+  $('#rotate_{{ name }}_0').attr('src', rotateUrls_{{ name }}[rotateUrlIndex_{{ name }}]);
+  var rotateFrameIndex_{{ name }} = 0;
+  function rotateContent_{{ name }}() {
+      {% if allowrepeat %}
+      rotateUrlIndex_{{ name }} = (rotateUrlIndex_{{ name }} +
+                        Math.floor(Math.random() * (rotateUrls_{{ name }}.length))
+                       ) % rotateUrls_{{ name }}.length;
+      {% else %}
+      rotateUrlIndex_{{ name }} = (rotateUrlIndex_{{ name }} + 1 + 
+                        Math.floor(Math.random() * (rotateUrls_{{ name }}.length - 1))
+                       ) % rotateUrls_{{ name }}.length;
+      {% endif %}
+      otherFrameIndex = (rotateFrameIndex_{{ name }} + 1) % 2;
+      $('#rotate_{{ name }}_' + otherFrameIndex).css('z-index', 0);
+      $('#rotate_{{ name }}_' + rotateFrameIndex_{{ name }}).css('z-index', 1);
+      document.getElementById('rotate_{{ name }}_' + rotateFrameIndex_{{ name }}).contentWindow.postMessage('start', '*');
+      $('#rotate_{{ name }}_' + rotateFrameIndex_{{ name }}).fadeIn(1000, function () {
+          $('#rotate_{{ name }}_' + otherFrameIndex).hide();
+          $('#rotate_{{ name }}_' + otherFrameIndex).attr('src', rotateUrls_{{ name }}[rotateUrlIndex_{{ name }}]);
+          rotateFrameIndex_{{ name }} = otherFrameIndex;
       });
   } 
   setTimeout(function () {
-      rotateContent();
-      setInterval(rotateContent, {{ seconds }} * 1000);
+      rotateContent_{{ name }}();
+      setInterval(rotateContent_{{ name }}, {{ seconds }} * 1000);
   } , 2000);
   //-->
   </script>
