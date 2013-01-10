@@ -12,7 +12,7 @@
             background: {{ resource.meta.background }};
         {% endif %}
         font-family: Arial, Helvetica, Bitstream Vera Sans, sans-serif; 
-        font-size: 18pt;
+        font-size: {{ resource.meta.font_size }};
         width: {{ resource.meta.page_width }};
         height: {{ resource.meta.page_height }};
         overflow: hidden;
@@ -21,7 +21,6 @@
   </head>
   <body>
     <script src="js/jquery-1.8.3.min.js"></script>
-    <script src="js/jquery.innerfade.min.js"></script>
     {%- block main %}
     {% endblock main -%}
 

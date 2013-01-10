@@ -9,6 +9,11 @@ background: white url(img/engcomp.png) no-repeat left top
 {%- from "weather.j2"  import weather -%}
 
 {%- call message(textcolor='red', textsize='36pt', left='50px', top='180px') %}
+Department Pizza Lunch Friday!<br />
+<div style="font-size: 15pt;">Engineering Computing Students &amp; Faculty Invited, Bldg 52 FORUM, 12:30pm</div>
+{% endcall -%}
+
+{%- call placed_image(image='pizza_slice_256.png', width='200px', left='980px', top='20px') %}
 {% endcall -%}
 
 {%- call rotate(name='sched', pages=['schedule.php'], allowrepeat=true, seconds=60, 
