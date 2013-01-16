@@ -16,7 +16,13 @@ Department Pizza Lunch Friday!<br />
 {%- call placed_image(image='pizza_slice_256.png', width='200px', left='980px', top='20px') %}
 {% endcall -%}
 
-{%- call rotate(name='sched', pages=['schedule.php'], allowrepeat=true, seconds=60, 
+{%- call rotate(name='sched', 
+    pages=[ 'schedule01.php',
+            'schedule02.php',
+            'schedule03.php',
+            'schedule04.php',
+            'schedule05.php'
+    ], seconds=60, 
                 width='880px', height='820px', left='50px', top='260px') %}
 {% endcall -%}
 

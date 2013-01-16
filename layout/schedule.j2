@@ -1,7 +1,12 @@
 {%- macro schedule(width, height, left, top, class='schedule') -%}
 <div style="position:absolute; width: {{ width }}; height: {{ height }}; left: {{ left }}; top: {{ top }}; font-size: 18pt;">
-<?php
 
+{%- block prehtml %}
+header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+{% endblock prehtml -%}
+
+<?php
 // custom calendar code based on GCalPHP, Mark Stillwell <m.stillwell@cranfield.ac.uk>
 
 /////////
@@ -30,14 +35,18 @@ $event_error="";
 $GroupByDate=true;
 
 $items_to_show=20;
+$lines_to_show=24;
 $max_days_in_future = 7;
+
+$title_width=40;
+$location_width=50;
 
 // ...and here's where you tell it to use a cache.
 // > touch gcal.xml
 // > chmod 666 gcal.xml
 // > touch -t 01101200 gcal.xml
 // If you don't need this, or this is all a bit complex, change this to 'false'
-$use_cache = false;
+$use_cache = true;
 
 //
 //End of configuration block
@@ -67,9 +76,10 @@ foreach($calendars as $calendar) {
         ////////
         //Cache
         //
+        $debug_mode = false;
        
-        $cache_time = 3600*12; // 12 hours
-        $cache_file = $_SERVER['DOCUMENT_ROOT'].'/gcal.xml'; //xml file saved on server
+        $cache_time = 3600; // 1 hour
+        $cache_file = '/tmp/' . $calendar . '-gcal.xml'; //xml file saved on server
        
         if ($debug_mode) {echo "<P>Your cache is saved at ".$cache_file."</P>";}
        
@@ -116,15 +126,13 @@ ksort($events);
 
 $items_shown=0;
 $lines_shown=0;
-// FIXME: make variable...
-$lines_to_show=20;
 $old_start_date="";
 $old_end_date="";
 
   echo "<table>";
 
   foreach ($events as $event){
-    if ($items_to_show > 0 and $items_shown < $items_to_show and $lines_shown < $lines_to_show) {
+    if ($items_to_show > 0 and $items_shown < $items_to_show and $lines_shown < $lines_to_show - 2) {
       $startDate = date($dateformat, $event->startTime);
       $startTime = date($timeformat, $event->startTime);
       $endDate = date($dateformat, $event->endTime - 1);
@@ -166,7 +174,12 @@ $old_end_date="";
         "</td><td style=\"padding: 0 5px 1px 0; vertical-align: top;\">" .  wordwrap($event->location, 50, "<br />") .
         "</td></tr>\n";
       $items_shown++;
-      $lines_shown++;
+      $title_lines = (int) ceil(strlen($event->title) / $title_width);
+      $location_lines = (int) ceil(strlen($event->location) / $location_width);
+      $lines_shown += max($title_lines, $location_lines);
+      if ($lines_shown >= $lines_to_show) {
+        break;
+      }
     }
   }
 
