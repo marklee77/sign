@@ -20,11 +20,11 @@ Department Pizza Lunch Friday!<br />
 {% endcall -%}
 -->
 
-{%- call rotate(name='sched', pages=[ 'schedule.php' ], seconds=60, 
+{%- call rotate(id='sched', pages=[ 'schedule.php' ], seconds=60, 
                 width='880px', height='820px', left='50px', top='260px') %}
 {% endcall -%}
 
-{%- call rotate(name='demo',
+{%- call rotate(id='demo',
     pagesets=[ 'rotate/gourma/frames.txt', 
                'rotate/jenkins/frames.txt', 
                'http://www.cranfield.ac.uk/~toby.breckon/amac_sign/frames.txt' 
