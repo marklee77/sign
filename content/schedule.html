@@ -1,25 +1,41 @@
 <!DOCTYPE html>
+<!-- FIXME: wordwrap and max lines... -->
 <html>
   <head>
     <meta charset="utf-8" />
     <title>calendar test</title>
+    <style type="text/css">
+      body {
+        background: none transparent;
+        font-family: Arial, Helvetica, Bitstream Vera Sans, sans-serif; 
+        font-size: 15pt;
+        width: 880px;
+        height: 820px;
+        overflow: hidden;
+      }
+      div.widget {
+        border: 2px solid red;
+      }
+    </style>
   </head>
   <body>
-    <div id='content'>
-      <h1>Events</h1>
-      <ul id='events'></ul>
-    </div>
+    <table id='events'></table>
     <script>
       var apiKey = 'AIzaSyCJMQsUg3u-O0IcmdGVfomuQTa_G4Mk2Nc';
       var calIdList = ['amac.cranfield@googlemail.com', 
                        'p2t1d9qvbg69lq59klqng5dc6s@group.calendar.google.com',
                        'ls6tjllu1ko99fl9j3vm1kpmio@group.calendar.google.com',
                        'e85187a6fn6jc818bp9mphgpmk@group.calendar.google.com',
-                       'hhn8pbbqdhur0r7pq1vh1m31m8@group.calendar.google.com',
-                       '6ciph13spq4rmq28shlai1s83s@group.calendar.google.com'];
+                       'hhn8pbbqdhur0r7pq1vh1m31m8@group.calendar.google.com'];
+      //               '6ciph13spq4rmq28shlai1s83s@group.calendar.google.com'];
       var ignoreTitleList = ['seminar slot', 'to be decided', 'tbd'];
       var maxMsInFuture = 7*24*60*60*1000;
       var maxResults = 10;
+      var dataRefreshMs = 10*60*1000;
+      var layoutRefreshMs = 30*1000;
+      var summaryMaxLength = 40;
+      var locationMaxLength = 50;
+      var maxLines = 24;
       
       var eventsElement = document.getElementById('events');
       var eventList = new Array();
@@ -103,7 +119,35 @@
         eventList = updatedEventList;
       }
 
+      function dateFormat(dateTime) {
+        var months = [ "January", "February", "March", "April", "May", "June",
+                       "July", "August", "September", "October", "November",
+                       "December" ];
+        var retval = dateTime.getDate() + ' ' + months[dateTime.getMonth()];
+        retval += ' ' + dateTime.getFullYear();
+        return retval;
+      }
+
+      function timeFormat(dateTime) {
+        var hours = dateTime.getHours();
+        var minutes = dateTime.getMinutes();
+        var ampm = (hours < 12) ? "am" : "pm";
+
+        if (0 == hours) {
+          hours = 12;
+        } else if (hours > 12) {
+          hours -= 12
+        }
+
+        if (minutes < 10) {
+          minutes = '0' + minutes
+        }
+
+        return hours + ':' + minutes + ampm;
+      }
+
       function layoutEventList() {
+        var now = new Date();
 
         // clear out element
         while (eventsElement.firstChild) {
@@ -111,15 +155,74 @@
         }
 
         // insert events
+        var prevStartDateString = '';
+        var prevEndDateString = '';     
+    
         for(var i = 0; i < eventList.length; i++) {
-          var li = document.createElement('li');
-          li.appendChild(document.createTextNode(eventList[i].toString()));
-          document.getElementById('events').appendChild(li);
+          var e = eventList[i];
+          var row = document.createElement('tr');
+          var startDateString = dateFormat(e.startDateTime);
+          var endDateString = dateFormat(new Date(e.endDateTime.getTime() - 1));
+
+          if (startDateString != prevStartDateString) {
+            var dateCell = document.createElement('td');
+            dateCell.setAttribute('colspan', 4);
+            var dateTextString = startDateString;
+            if (startDateString != endDateString) {
+              dateTextString += ' - ' + endDateString;
+            }
+            //var dateText = document.createTextNode(dateTextString);
+            //dateCell.appendChild(dateText)
+            dateCell.innerHTML = dateTextString.bold();
+            row.appendChild(dateCell);
+            eventsElement.appendChild(row);
+            row = document.createElement('tr');
+            prevStartDateString = startDateString;
+            prevEndDateString = endDateString;
+          }
+
+          if (e.startDateTime <= now && now <= e.endDateTime) {
+            row.setAttribute('style', 'color: red;');
+          }
+
+          var startCell = document.createElement('td');
+          startCell.setAttribute('style', 
+            'padding: 0 5px 1px 0; vertical-align: top; text-align: right;');
+          if (e.showStartTime) {
+            var startText = 
+              document.createTextNode(timeFormat(e.startDateTime));
+            startCell.appendChild(startText);
+          }
+          row.appendChild(startCell);
+          var endCell = document.createElement('td');
+          endCell.setAttribute('style', 
+            'padding: 0 5px 1px 0; vertical-align: top; text-align: right;');
+          if (e.showEndTime) {
+            var endText = document.createTextNode(timeFormat(e.endDateTime));
+            endCell.appendChild(endText);
+          }
+          row.appendChild(endCell);
+          var summaryCell = document.createElement('td');
+          summaryCell.setAttribute('style', 
+            'padding: 0 5px 1px 0; vertical-align: top;');
+          var summaryText = document.createTextNode(e.summary)
+          summaryCell.appendChild(summaryText);
+          row.appendChild(summaryCell);
+          var locationCell = document.createElement('td'); 
+          locationCell.setAttribute('style', 
+            'padding: 0 5px 1px 0; vertical-align: top;');
+          if (e.location) {
+            var locationText = document.createTextNode(e.location);
+            locationCell.appendChild(locationText);
+          }
+          row.appendChild(locationCell);
+          eventsElement.appendChild(row);
         }
 
       }
 
-      function getCalEvents(calId, now) {
+      function getCalEvents(calId) {
+        var now = new Date();
         var timeMax = new Date(now.getTime() + maxMsInFuture);
         var request = gapi.client.calendar.events.list({
             'calendarId': calId,
@@ -144,17 +247,20 @@
       }
 
       function loadCalendars() {
-        var now = new Date();
-        for(var i = 0; i < calIdList.length; i++) {
-          getCalEvents(calIdList[i], now);
-        }
+        gapi.client.load('calendar', 'v3', function() {
+          for(var i = 0; i < calIdList.length; i++) {
+            getCalEvents(calIdList[i]);
+          }
+        });
       }
 
       function handleClientLoad() {
-        var now = new Date();
         gapi.client.setApiKey(apiKey);
-        gapi.client.load('calendar', 'v3', loadCalendars);
+        loadCalendars();
+        setInterval(loadCalendars, 10*60*1000);
+        setInterval(layoutEventList, 60*1000);
       }
+
     </script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
