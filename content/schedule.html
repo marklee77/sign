@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- FIXME: max height almost right, but need to roll back date row too... -->
 <html>
   <head>
     <meta charset="utf-8" />
@@ -30,14 +29,13 @@
       //               '6ciph13spq4rmq28shlai1s83s@group.calendar.google.com'];
       var ignoreTitleList = ['seminar slot', 'to be decided', 'tbd'];
       var maxMsInFuture = 7*24*60*60*1000;
-      var maxResults = 10;
+      var maxResults = 20;
+      var maxHeight = 600;
       var dataRefreshMs = 10*60*1000;
       var layoutRefreshMs = 30*1000;
-      var summaryMaxLength = 40;
-      var locationMaxLength = 50;
       
       var eventsElement = document.getElementById('events');
-      var eventList = new Array();
+      var eventList = [];
 
       function Event(item) {
         this.summary = item.summary;
@@ -59,15 +57,6 @@
             this.showEndTime = false;
         }
       }
-      Event.prototype.toString = function() {
-        var retval = this.startDateTime.getTime();
-        retval += ' ' + this.endDateTime.getTime();
-        retval += ' ' + this.summary;
-        if(this.location) {
-          retval += ' ' + this.location;
-        }
-        return retval;
-      };
 
       function compareEvents(a, b) {
 
@@ -93,12 +82,16 @@
       }
 
       function updateEventList(newEventList) {
-        var updatedEventList = new Array();
+        var updatedEventList = [];
         var now = new Date();
         var i = 0, j = 0;
         while (i < eventList.length && j < newEventList.length) {
+
+          // skip old events
           while(i < eventList.length && eventList[i].endDateTime < now) i++;
           if (i >= eventList.length) break;
+
+          // pick a new event to add
           compVal = compareEvents(eventList[i], newEventList[j]);
           if (-1 == compVal) {
             updatedEventList.push(eventList[i++]);
@@ -145,10 +138,10 @@
         return hours + ':' + minutes + ampm;
       }
 
-      function layoutEventList() {
+      function layoutEvents() {
         var now = new Date();
 
-        // clear out element
+        // clear out table
         while (eventsElement.firstChild) {
           eventsElement.removeChild(eventsElement.firstChild);
         }
@@ -159,11 +152,13 @@
     
         for(var i = 0; i < eventList.length; i++) {
           var e = eventList[i];
-          var row = document.createElement('tr');
           var startDateString = dateFormat(e.startDateTime);
           var endDateString = dateFormat(new Date(e.endDateTime.getTime() - 1));
+          var dateRow = null;
 
-          if (startDateString != prevStartDateString) {
+          if (startDateString != prevStartDateString || 
+              endDateString != prevEndDateString) {
+            dateRow = document.createElement('tr');
             var dateCell = document.createElement('td');
             dateCell.setAttribute('colspan', 4);
             var dateTextString = startDateString;
@@ -171,19 +166,16 @@
               dateTextString += ' - ' + endDateString;
             }
             dateCell.innerHTML = dateTextString.bold();
-            row.appendChild(dateCell);
-            eventsElement.appendChild(row);
-            if (eventsElement.clientHeight > 200) {
-              eventsElement.removeChild(row);
-              return;
-            }
-            row = document.createElement('tr');
+            dateRow.appendChild(dateCell);
+            eventsElement.appendChild(dateRow);
             prevStartDateString = startDateString;
             prevEndDateString = endDateString;
           }
 
+          var eventRow = document.createElement('tr');
+
           if (e.startDateTime <= now && now <= e.endDateTime) {
-            row.setAttribute('style', 'color: red;');
+            eventRow.setAttribute('style', 'color: red;');
           }
 
           var startCell = document.createElement('td');
@@ -194,7 +186,7 @@
               document.createTextNode(timeFormat(e.startDateTime));
             startCell.appendChild(startText);
           }
-          row.appendChild(startCell);
+          eventRow.appendChild(startCell);
           var endCell = document.createElement('td');
           endCell.setAttribute('style', 
             'padding: 0 5px 1px 0; vertical-align: top; text-align: right;');
@@ -202,13 +194,13 @@
             var endText = document.createTextNode(timeFormat(e.endDateTime));
             endCell.appendChild(endText);
           }
-          row.appendChild(endCell);
+          eventRow.appendChild(endCell);
           var summaryCell = document.createElement('td');
           summaryCell.setAttribute('style', 
             'padding: 0 5px 1px 0; vertical-align: top;');
           var summaryText = document.createTextNode(e.summary)
           summaryCell.appendChild(summaryText);
-          row.appendChild(summaryCell);
+          eventRow.appendChild(summaryCell);
           var locationCell = document.createElement('td'); 
           locationCell.setAttribute('style', 
             'padding: 0 5px 1px 0; vertical-align: top;');
@@ -216,17 +208,20 @@
             var locationText = document.createTextNode(e.location);
             locationCell.appendChild(locationText);
           }
-          row.appendChild(locationCell);
-          eventsElement.appendChild(row);
-          if (eventsElement.clientHeight > 200) {
-            eventsElement.removeChild(row);
+          eventRow.appendChild(locationCell);
+          eventsElement.appendChild(eventRow);
+          if (eventsElement.clientHeight > maxHeight) {
+            if (dateRow) {
+                eventsElement.removeChild(dateRow);
+            }
+            eventsElement.removeChild(eventRow);
             return;
           }
         }
 
       }
 
-      function getCalEvents(calId) {
+      function loadCalendarEvents(calId) {
         var now = new Date();
         var timeMax = new Date(now.getTime() + maxMsInFuture);
         var request = gapi.client.calendar.events.list({
@@ -247,25 +242,24 @@
           }
           newEventList.sort(compareEvents);
           updateEventList(newEventList);
-          layoutEventList();
+          layoutEvents();
         });
       }
 
-      function loadCalendars() {
+      function loadEvents() {
         gapi.client.load('calendar', 'v3', function() {
           for(var i = 0; i < calIdList.length; i++) {
-            getCalEvents(calIdList[i]);
+            loadCalendarEvents(calIdList[i]);
           }
         });
       }
 
       function handleClientLoad() {
         gapi.client.setApiKey(apiKey);
-        loadCalendars();
-        setInterval(loadCalendars, 10*60*1000);
-        setInterval(layoutEventList, 60*1000);
+        loadEvents();
+        setInterval(loadEvents, 10*60*1000);
+        setInterval(layoutEvents, 60*1000);
       }
-
     </script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
