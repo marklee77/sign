@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- FIXME: wordwrap and max lines... -->
+<!-- FIXME: max height almost right, but need to roll back date row too... -->
 <html>
   <head>
     <meta charset="utf-8" />
@@ -35,7 +35,6 @@
       var layoutRefreshMs = 30*1000;
       var summaryMaxLength = 40;
       var locationMaxLength = 50;
-      var maxLines = 24;
       
       var eventsElement = document.getElementById('events');
       var eventList = new Array();
@@ -171,11 +170,13 @@
             if (startDateString != endDateString) {
               dateTextString += ' - ' + endDateString;
             }
-            //var dateText = document.createTextNode(dateTextString);
-            //dateCell.appendChild(dateText)
             dateCell.innerHTML = dateTextString.bold();
             row.appendChild(dateCell);
             eventsElement.appendChild(row);
+            if (eventsElement.clientHeight > 200) {
+              eventsElement.removeChild(row);
+              return;
+            }
             row = document.createElement('tr');
             prevStartDateString = startDateString;
             prevEndDateString = endDateString;
@@ -217,6 +218,10 @@
           }
           row.appendChild(locationCell);
           eventsElement.appendChild(row);
+          if (eventsElement.clientHeight > 200) {
+            eventsElement.removeChild(row);
+            return;
+          }
         }
 
       }
