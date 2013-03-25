@@ -3,9 +3,10 @@ background: white url(img/engcomp.png) no-repeat left top
 ---
 {%- from "message.j2"  import message -%}
 {%- from "image.j2"    import placed_image -%}
+{%- from "schedule.j2" import schedule -%}
+{%- from "weather.j2"  import weather -%}
 {%- from "rotate.j2"   import rotate -%}
 {%- from "clock.j2"    import clock -%}
-{%- from "weather.j2"  import weather -%}
 
 <!--
 {%- call message(textcolor='red', textsize='36pt', left='50px', top='180px') %}
@@ -20,8 +21,10 @@ Department Pizza Lunch Friday!<br />
 {% endcall -%}
 -->
 
-{%- call rotate(id='sched', pages=[ 'schedule.php' ], seconds=60, 
-                width='880px', height='820px', left='50px', top='260px') %}
+{%- call schedule(width='880px', height='640px', left='50px', top='260px') %}
+{% endcall -%}
+
+{%- call weather(left='50px', top='900px') %}
 {% endcall -%}
 
 {%- call rotate(id='demo',
@@ -34,7 +37,4 @@ Department Pizza Lunch Friday!<br />
 
 {%- call clock(textcolor='blue', textsize='48pt', 
                width='840px', height='400px', left='950px', top='900px') %}
-{% endcall -%}
-
-{%- call weather(left='50px', top='900px') %}
 {% endcall -%}
