@@ -1,2 +1,0 @@
-rotate/jenkins/frame_001.html
-rotate/jenkins/frame_002.html
