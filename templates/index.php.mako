@@ -1,10 +1,10 @@
 <%inherit file="main.html.mako" />
-<%namespace name="message"  file="message.mako"  />
-<%namespace name="image"    file="image.mako"    />
-<%namespace name="schedule" file="schedule.mako" />
-<%namespace name="weather"  file="weather.mako"  />
-<%namespace name="rotate"   file="rotate.mako"   />
-<%namespace name="clock"    file="clock.mako"    />
+<%namespace name="message"  file="message.mako"        />
+<%namespace file="image.mako"    import="placed_image" />
+<%namespace file="schedule.mako" import="schedule"     />
+<%namespace file="weather.mako"  import="weather"      />
+<%namespace file="rotate.mako"   import="rotate"       />
+<%namespace file="clock.mako"    import="clock"        />
 
 <%doc>
 <%message:message textcolor="red" textsize="36pt" left="50px" top="180px">
@@ -15,15 +15,15 @@ Invited, Bldg 52 FORUM, 12:30pm</div>
 </%doc>
 
 <%doc>
-${image.placed_image(image='pizza_slice_256.png', 
+${placed_image(image='pizza_slice_256.png', 
                      width='200px', left='980px', top='20px')}
 </%doc>
 
-${schedule.schedule(width='880px', height='640px', left='50px', top='260px')}
+${schedule(width='880px', height='640px', left='50px', top='260px')}
 
-${weather.weather(left='50px', top='900px')}
+${weather(left='50px', top='900px')}
 
-${rotate.rotate(id='demo', pagesets=[
+${rotate(id='demo', pagesets=[
                 'rotate/gourma/frames.txt',
                 'rotate/jenkins/frames.txt',
                 'http://www.cranfield.ac.uk/~toby.breckon/amac_sign/frames.txt',
@@ -32,5 +32,5 @@ ${rotate.rotate(id='demo', pagesets=[
                 width='840px', height='650px', left='950px', top='235px')}
 
 
-${clock.clock(textcolor='blue', textsize='48pt', 
+${clock(textcolor='blue', textsize='48pt', 
               width='840px', height='400px', left='950px', top='900px')}
