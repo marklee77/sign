@@ -1,0 +1,2 @@
+rotate/gourma/frame_001.html
+rotate/gourma/frame_002.html
