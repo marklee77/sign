@@ -1,10 +1,10 @@
 {%- macro schedule(width, height, left, top, id='') %}
     <table id='schedule' class='widget' style="
         position: absolute; border: 0px; overflow: hidden; font-size: 15pt;
-        width: {{width}}; height: {{height}}; top: {{top}}; left: {{left}};"
+        width: {{width}}; top: {{top}}; left: {{left}};"
     >{{ caller() }}</table>
     <script>
-      var apiKey = 'AIzaSyCJMQsUg3u-O0IcmdGVfomuQTa_G4Mk2Nc';
+      var apiKey = 'AIzaSyB4THC4kQ9k9vm5EITFNdxSjhffNlBfsng';
       var calIdList = ['amac.cranfield@googlemail.com', 
                        'p2t1d9qvbg69lq59klqng5dc6s@group.calendar.google.com',
                        'ls6tjllu1ko99fl9j3vm1kpmio@group.calendar.google.com',
@@ -37,7 +37,11 @@
             this.endDateTime = new Date(item.end.dateTime)
             this.showEndTime = true;
         } else if (item.end.date) {
-            this.endDateTime = new Date(item.end.date);
+            // all day events show as ending FOLLOWING date on google cal...
+            var tmpEndDateTime = new Date(item.end.date);
+            // substract off an hour + 1ms so that the time change does not make
+            // easter look like it spans two days...
+            this.endDateTime = new Date(tmpEndDateTime.getTime() - 3600001);
             this.showEndTime = false;
         }
       }
@@ -137,7 +141,7 @@
         for(var i = 0; i < eventList.length; i++) {
           var e = eventList[i];
           var startDateString = dateFormat(e.startDateTime);
-          var endDateString = dateFormat(new Date(e.endDateTime.getTime() - 1));
+          var endDateString = dateFormat(e.endDateTime);
           var dateRow = null;
 
           if (startDateString != prevStartDateString || 
@@ -164,7 +168,7 @@
 
           var startCell = document.createElement('td');
           startCell.setAttribute('style', 
-            'padding: 0 5px 1px 0; vertical-align: top; text-align: right;');
+            'width: 70px; padding: 0 10px 1px 0; vertical-align: top; text-align: right;');
           if (e.showStartTime) {
             var startText = 
               document.createTextNode(timeFormat(e.startDateTime));
@@ -173,7 +177,7 @@
           eventRow.appendChild(startCell);
           var endCell = document.createElement('td');
           endCell.setAttribute('style', 
-            'padding: 0 5px 1px 0; vertical-align: top; text-align: right;');
+            'width: 70px; padding: 0 10px 1px 0; vertical-align: top; text-align: right;');
           if (e.showEndTime) {
             var endText = document.createTextNode(timeFormat(e.endDateTime));
             endCell.appendChild(endText);
@@ -181,13 +185,13 @@
           eventRow.appendChild(endCell);
           var summaryCell = document.createElement('td');
           summaryCell.setAttribute('style', 
-            'padding: 0 5px 1px 0; vertical-align: top;');
+            'width: 350px; padding: 0 10px 1px 0; vertical-align: top;');
           var summaryText = document.createTextNode(e.summary)
           summaryCell.appendChild(summaryText);
           eventRow.appendChild(summaryCell);
           var locationCell = document.createElement('td'); 
           locationCell.setAttribute('style', 
-            'padding: 0 5px 1px 0; vertical-align: top;');
+            'width: 350px; padding: 0 10px 1px 0; vertical-align: top;');
           if (e.location) {
             var locationText = document.createTextNode(e.location);
             locationCell.appendChild(locationText);

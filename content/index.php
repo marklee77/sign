@@ -8,14 +8,14 @@ background: white url(img/engcomp.png) no-repeat left top
 {%- from "rotate.j2"   import rotate -%}
 {%- from "clock.j2"    import clock -%}
 
-<!--
 {%- call message(textcolor='red', textsize='36pt', left='50px', top='180px') %}
+<!--
 Department Pizza Lunch Friday!<br />
-<div style="font-size: 15pt;"
->Engineering Computing Students &amp; Faculty Invited, Bldg 52 FORUM, 12:30pm<
-/div>
+<div style="font-size: 15pt;">Engineering Computing Students &amp; Faculty Invited, Bldg 52 FORUM, 12:30pm</div>
+-->
 {% endcall -%}
 
+<!--
 {%- call placed_image(image='pizza_slice_256.png', width='200px', left='980px', 
                       top='20px') %}
 {% endcall -%}
@@ -28,9 +28,11 @@ Department Pizza Lunch Friday!<br />
 {% endcall -%}
 
 {%- call rotate(id='demo',
-    pagesets=[ 'rotate/gourma/frames.txt', 
+    pagesets=[ 
+               'rotate/gourma/frames.txt', 
                'rotate/jenkins/frames.txt', 
-               'http://www.cranfield.ac.uk/~toby.breckon/amac_sign/frames.txt' 
+               'http://www.cranfield.ac.uk/~toby.breckon/amac_sign/frames.txt',
+               'rotate/armitage/frames.txt'
     ], seconds='30', 
     width='840px', height='650px', left='950px', top='235px') %}
 {% endcall -%}
