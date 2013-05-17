@@ -1,5 +1,5 @@
 <%inherit file="main.html.mako" />
-<%namespace name="message"  file="message.mako"        />
+<%namespace file="message.mako"  import="message"      />
 <%namespace file="image.mako"    import="placed_image" />
 <%namespace file="schedule.mako" import="schedule"     />
 <%namespace file="weather.mako"  import="weather"      />
@@ -7,11 +7,11 @@
 <%namespace file="clock.mako"    import="clock"        />
 
 <%doc>
-<%message:message textcolor="red" textsize="36pt" left="50px" top="180px">
+<%message textcolor="red" textsize="36pt" left="50px" top="180px">
 Department Pizza Lunch Friday!<br />
 <div style="font-size: 15pt;">Engineering Computing Students &amp; Faculty
 Invited, Bldg 52 FORUM, 12:30pm</div>
-</%message:message>
+</%message>
 </%doc>
 
 <%doc>
