@@ -32,5 +32,5 @@ ${rotate(id='demo', pagesets=[
                 width='840px', height='650px', left='950px', top='235px')}
 
 
-${clock(textcolor='blue', textsize='48pt', 
-              width='840px', height='400px', left='950px', top='900px')}
+${clock(textcolor='#9a9b9c', textsize='36pt', 
+              width='840px', height='100px', left='950px', top='900px')}

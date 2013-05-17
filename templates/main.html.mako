@@ -14,12 +14,12 @@
       }
       body header h1 {
         color: white;
-        font-size: 48pt;
+        font-size: 60pt;
         margin: 0px;
         padding: 0px;
       }
       body header h2 {
-        font-size: 24pt;
+        font-size: 30pt;
         margin: 0px;
         padding: 0px;
       }

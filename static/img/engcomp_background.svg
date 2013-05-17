@@ -2,6 +2,6 @@
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
      width="1920px" height="1080px">
-  <rect x="-800" y="-400" width="1600" height="800" rx="60" fill="#9a9b9c" 
+  <rect x="-1000" y="-500" width="2000" height="1000" rx="60" fill="#9a9b9c" 
         transform="rotate(-20)" />
 </svg>
