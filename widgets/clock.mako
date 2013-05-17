@@ -2,7 +2,7 @@
     <div id="clock" style="position: absolute; text-align: center; 
         color: ${textcolor}; 
         font-family: Droid Sans Mono; font-size: ${textsize}; 
-        width: ${width}; height: ${height}; left: ${left}; top: ${top};" />
+        width: ${width}; height: ${height}; left: ${left}; top: ${top};"></div>
     <script type="text/javascript">
     <!--
         function zPad(i) { return (i < 10) ? "0" + i : i; }
