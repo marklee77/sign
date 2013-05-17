@@ -3,5 +3,6 @@
 rm -rf deploy
 cp -r static deploy 
 rsync -pr private/. deploy
-template-render -d ./templates:./widgets -t index.php.mako -o ./deploy/index.php
+template-render -d ./templates:./widgets -t index.php.mako -m ./private.yaml \
+    -o ./deploy/index.php
 # git commit, then push to repo on amac-xibo...

@@ -4,7 +4,7 @@
         width: ${width}; top: ${top}; left: ${left};"
     />
     <script>
-      var apiKey = 'FIXME';
+      var apiKey = '${meta['google_apikey']}';
       var calIdList = ['amac.cranfield@googlemail.com', 
                        'p2t1d9qvbg69lq59klqng5dc6s@group.calendar.google.com',
                        'ls6tjllu1ko99fl9j3vm1kpmio@group.calendar.google.com',
