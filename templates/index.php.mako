@@ -18,6 +18,8 @@ Invited, Bldg 52 FORUM, 12:30pm</div>
 ${placed_image(image='pizza_slice_256.png', 
                      width='200px', left='980px', top='20px')}
 
+
+                'http://www.cranfield.ac.uk/~toby.breckon/amac_sign/frames.txt',
 </%doc>
 
 ${schedule(width='880px', height='640px', left='50px', top='260px')}
@@ -25,10 +27,10 @@ ${schedule(width='880px', height='640px', left='50px', top='260px')}
 ${weather(left='50px', top='900px')}
 
 ${rotate(id='demo', pagesets=[
+                'rotate/armitage/frames.txt',
+                'rotate/breckon/frames.txt',
                 'rotate/gourma/frames.txt',
                 'rotate/jenkins/frames.txt',
-                'http://www.cranfield.ac.uk/~toby.breckon/amac_sign/frames.txt',
-                'rotate/armitage/frames.txt',
                 'rotate/stillwell/frames.txt'], 
                 seconds='30',
                 width='840px', height='650px', left='950px', top='235px')}

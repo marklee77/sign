@@ -1,17 +1,22 @@
 <%def name="clock(textcolor, textsize, width, height, left, top)">
-    <div id="clock" style="position: absolute; text-align: center; 
-        color: ${textcolor}; 
-        font-family: Droid Sans Mono; font-size: ${textsize}; 
-        width: ${width}; height: ${height}; left: ${left}; top: ${top};"></div>
+    <% 
+      import os
+      clockId = os.urandom(16).encode('hex')
+    %>
+    <!-- FIXME: just ask for mono, set mono elsewhere... -->
+    <div id="${clockId}" style="
+        font-family: Droid Sans Mono; font-size: ${textsize};
+        text-align: center; color: ${textcolor}; position: absolute; 
+        width: ${width}; height: ${height}; left: ${left}; top: ${top};"
+        ></div>
     <script type="text/javascript">
     <!--
-        function zPad(i) { return (i < 10) ? "0" + i : i; }
-        function startTime() {
-            var now = new Date();
-            document.getElementById('clock').innerHTML = zPad(now.getHours()) +
-                ":" + zPad(now.getMinutes()) + ":" + zPad(now.getSeconds());
+        function addClock(element) {
+            setInterval(function () { 
+                element.innerHTML = (new Date()).toLocaleTimeString("en-GB");
+            }, 500);
         }
-        setInterval(startTime, 500);
+        addClock(document.getElementById('${clockId}'));
     // -->
     </script>
 </%def>

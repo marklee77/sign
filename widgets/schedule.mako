@@ -4,6 +4,7 @@
         width: ${width}; top: ${top}; left: ${left};"
     />
     <script>
+      // FIXME: all of these should be parameters
       var apiKey = '${meta['google_apikey']}';
       var calIdList = ['amac.cranfield@googlemail.com', 
                        'p2t1d9qvbg69lq59klqng5dc6s@group.calendar.google.com',
@@ -222,10 +223,12 @@
         });
         request.execute(function(response) {
           var newEventList = new Array();
-          for (var i = 0; i < response.items.length; i++) {
-              var item = response.items[i];
-              if (ignoreTitleList.indexOf(item.summary.toLowerCase()) < 0) {
-                newEventList.push(new Event(item));
+          if (response.items) {
+              for (var i = 0; i < response.items.length; i++) {
+                  var item = response.items[i];
+                  if (ignoreTitleList.indexOf(item.summary.toLowerCase()) < 0) {
+                    newEventList.push(new Event(item));
+                  }
               }
           }
           newEventList.sort(compareEvents);
