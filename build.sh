@@ -1,8 +1,8 @@
 #!/bin/bash 
-# change to rsync...
-rm -rf deploy
-cp -r static deploy 
-rsync -pr private/. deploy
-template-render -d ./templates:./widgets -t index.php.mako -m ./private.yaml \
-    -o ./deploy/index.php
+mkdir -p deploy
+rsync -pr --delete static/ deploy/
+rsync -pr private/ deploy/
+umask 133
+template-render -d ./templates:./widgets -t index.html.mako -m ./private.yaml \
+    -o ./deploy/index.html
 # git commit, then push to repo on amac-xibo...

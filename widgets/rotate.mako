@@ -1,64 +1,71 @@
-<%def name="rotate(pagesets, seconds, width, height, left, top, id)">
+<%def name="rotate(width, height, left, top, pagesets, seconds)">
 
-  % for index in range(2):
-    <iframe id="rotate_${id}_${index}" class="rotate widget" style="
-        position: absolute; border: 0px; overflow: hidden;
-        width: ${width}; height: ${height}; top: ${top}; left: ${left};"
-        src="" onload="$('this').hide();"></iframe>
-  % endfor
+    <% 
+        import os
+        frameIds = [] 
+    %>
 
-  <script type="text/javascript">
-  <!--
+    % for index in range(2):
+        <%
+            frameId = os.urandom(16).encode('hex')
+            frameIds.append(frameId);
+        %>
+        <iframe id="${frameId}" style="position: absolute; 
+        width: ${width}; height: ${height}; left: ${left}; top: ${top}; 
+        border: 0px; overflow: hidden;" src=""></iframe>
+    % endfor
 
-  var rotateUrls_${id} = new Array();
-  <?php 
-      $rotateUrls = array(); 
-      % for pageset in pagesets:
-          $response = file_get_contents("${pageset}");
-          $url_list = preg_split('/\s+/', trim($response));
-          foreach($url_list as $url) {
-              $rotateUrls[] = $url;
-          }
-      % endfor
-      <%doc>
-      % for page in pages:
-          $rotateUrls[] = "${page}";
-      % endfor
-      </%doc> 
-      foreach($rotateUrls as $url) {
-          echo "rotateUrls_${id}.push(\"" . $url . "\")\n";
-      }
-  ?>
-  var rotateUrlIndex_${id} = 
-      Math.floor(Math.random() * rotateUrls_${id}.length);
-  var rotateFrameIndex_${id} = 0;
+    <script>
+    $(document).ready(function() {
 
-  $('#rotate_${id}_' + rotateFrameIndex_${id}).hide();
-  $('#rotate_${id}_' + rotateFrameIndex_${id}).attr('src', 
-      rotateUrls_${id}[rotateUrlIndex_${id}] + '?now=' + (new Date()).getTime());
+        var rotationStarted = false;
+        var frames = [$('#${frameIds[0]}'), $('#${frameIds[1]}')];
+        var frameIdx = 0;
+        var urls = new Array();
+        var urlIdx;
 
-  function rotateContent(urls) {
-      rotateUrlIndex_${id} = (rotateUrlIndex_${id} + 1 + 
-          Math.floor(Math.random() * (urls.length - 1))) % urls.length;
-      otherFrameIndex = (rotateFrameIndex_${id} + 1) % 2;
-      $('#rotate_${id}_' + otherFrameIndex).css('z-index', 0);
-      $('#rotate_${id}_' + rotateFrameIndex_${id}).css('z-index', 1);
-      document.getElementById('rotate_${id}_' + 
-          rotateFrameIndex_${id}).contentWindow.postMessage('start', '*');
-      $('#rotate_${id}_' + rotateFrameIndex_${id}).fadeIn(1000, function () {
-          $('#rotate_${id}_' + otherFrameIndex).hide();
-          $('#rotate_${id}_' + otherFrameIndex).attr('src', 
-            urls[rotateUrlIndex_${id}] + '?now=' + (new Date()).getTime());
-          rotateFrameIndex_${id} = otherFrameIndex;
-      });
-  } 
+        frames[0].hide();
+        frames[1].hide();
+        frames[0].css('z-index', 0);
+        frames[1].css('z-index', 1);
 
-  setTimeout(function () {
-      rotateContent(rotateUrls_${id});
-      setInterval(function () { rotateContent(rotateUrls_${id}); }, 
-                  ${seconds} * 1000);
-  } , 2000);
+        function rotate() {
+            var nextTopFrame = frames[frameIdx];
+            frameIdx = (frameIdx + 1) % 2;
+            var nextBottomFrame = frames[frameIdx];
+            nextTopFrame.css('z-index', 1);
+            nextBottomFrame.css('z-index', 0);
+            urlIdx = (urlIdx + 1 + 
+                Math.floor(Math.random() * (urls.length - 1))) % urls.length;
+            var nextUrl = urls[urlIdx] + '?now=' + (new Date()).getTime();
+            nextTopFrame[0].contentWindow.postMessage('start', '*');
+            nextTopFrame.fadeIn(1000, function () {
+                nextBottomFrame.hide();
+                nextBottomFrame.attr('src', nextUrl);
+            });
+        }
 
-  //-->
-  </script>
+        function addUrlsAndStart(text) {
+            $.merge(urls, $.trim(text).split(/\s+/));
+            setTimeout(function () {
+                if (urls.length > 0 && ! rotationStarted) {
+                    var nextTopFrame = frames[frameIdx];
+                    urlIdx = Math.floor(Math.random() * urls.length);
+                    rotationStarted = true;
+                    nextTopFrame.attr('src', urls[urlIdx]);
+                    nextTopFrame.load(function () {
+                        rotate();
+                        setInterval(rotate, ${seconds}*1000);
+                        nextTopFrame.off('load');
+                    });
+                }
+            }, 500);
+        }
+
+        % for pageset in pagesets:
+            $.get('${pageset}', addUrlsAndStart);
+        % endfor
+
+    });
+    </script>
 </%def>

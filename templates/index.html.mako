@@ -24,17 +24,18 @@ ${placed_image(image='pizza_slice_256.png',
 
 ${schedule(width='880px', height='640px', left='50px', top='260px')}
 
-${weather(left='50px', top='900px')}
+${weather(width='640px', left='50px', top='900px')}
 
-${rotate(id='demo', pagesets=[
+${rotate(width='840px', height='650px', left='950px', top='235px',
+         pagesets=[
                 'rotate/armitage/frames.txt',
                 'rotate/breckon/frames.txt',
                 'rotate/gourma/frames.txt',
                 'rotate/jenkins/frames.txt',
                 'rotate/stillwell/frames.txt'], 
-                seconds='30',
-                width='840px', height='650px', left='950px', top='235px')}
+                seconds='30'
+)}
 
 
-${clock(textcolor='#9a9b9c', textsize='36pt', 
-              width='840px', height='100px', left='950px', top='900px')}
+${clock(width='840px', left='950px', top='900px', 
+        textsize='36pt', textcolor='#9a9b9c')}

@@ -35,7 +35,7 @@
         bottom: 50px; right: 50px;
       }
     </style>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+    <script src="js/jquery-2.0.0.min.js"></script> 
   </head>
   <body>
      <header>

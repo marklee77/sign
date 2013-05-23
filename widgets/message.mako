@@ -1,5 +1,6 @@
-<%def name="message(textcolor, textsize, left, top)">
-    <div style="position: absolute; color: ${textcolor}; font-size: ${textsize};
-        top: ${top}; left: ${left};"
+<%def name="message(width, left, top, textsize, textcolor)">
+    <div style="
+        position: absolute; width: ${width}; left: ${left}; top: ${top};
+        font-size: ${textsize}; color: ${textcolor};"
     />${caller.body()}</div>
 </%def>
