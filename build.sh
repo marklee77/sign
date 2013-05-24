@@ -5,4 +5,6 @@ rsync -pr private/ deploy/
 umask 133
 template-render -d ./templates:./widgets -t index.html.mako -m ./private.yaml \
     -o ./deploy/index.html
-# git commit, then push to repo on amac-xibo...
+mkdir -p deploy/css
+lessc style/default.less > deploy/css/default.css
+lessc style/main.less > deploy/css/main.css
