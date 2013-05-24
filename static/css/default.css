@@ -1,0 +1,18 @@
+@font-face {
+    font-family: site-sans-serif;
+    src: local("DefusedLight");
+    src: url(../font/defused-lt.ttf);
+}
+
+@font-face {
+    font-family: site-monospace;
+    src: local("Droid Sans Mono");
+    src: url(../font/DroidSansMono.ttf);
+}
+
+body {
+    background: white;
+    font-family: site-sans-serif, sans-serif; 
+    overflow: hidden;
+    font-size: 18pt;
+}

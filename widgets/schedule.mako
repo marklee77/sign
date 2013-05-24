@@ -1,11 +1,6 @@
 <%def name="schedule(width, height, left, top, 
                      apiKey, calIdList, ignoreTitleList, maxDays, maxResults, 
                      dataRefreshSeconds, layoutRefreshSeconds)">
-    <%doc>
-        FIXME:
-            move configuration to parameters
-    </%doc>
-
     <%
       import os
       scheduleId = os.urandom(16).encode('hex')
@@ -114,16 +109,23 @@
         }
 
         function dateFormat(dateTime) {
+
+            //return dateTime.toLocaleDateString();
+
             var months = [ "January", "February", "March", "April", "May", 
                            "June", "July", "August", "September", "October", 
                            "November", "December" ];
             var retval = dateTime.getDate() + ' ' + months[dateTime.getMonth()];
             retval += ' ' + dateTime.getFullYear();
             return retval;
+
         }
 
         // FIXME: replace with localeTimeString?
         function timeFormat(dateTime) {
+
+            return dateTime.toLocaleTimeString();
+            
             var hours = dateTime.getHours();
             var minutes = dateTime.getMinutes();
             var ampm = (hours < 12) ? "am" : "pm";
