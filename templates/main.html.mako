@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <style type="text/css">
+    <style>
 
       @font-face {
           font-family: site-sans-serif;
