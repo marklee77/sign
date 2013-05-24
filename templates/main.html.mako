@@ -3,9 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <style type="text/css">
+
+      @font-face {
+          font-family: site-sans-serif;
+          src: local("DefusedLight");
+          src: url(font/defused-lt.ttf);
+      }
+
+      @font-face {
+          font-family: site-monospace;
+          src: local("Droid Sans Mono");
+          src: url(font/DroidSansMono.ttf);
+      }
+
       body {
         background: white url(img/engcomp_background.svg) left top no-repeat;
-        font-family: DefusedLight, sans-serif; 
+        font-family: site-sans-serif, sans-serif; 
         width: 1920px;
         height: 1080px;
         overflow: hidden;

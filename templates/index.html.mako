@@ -8,21 +8,31 @@
 <%namespace file="clock.mako"    import="clock"        />
 
 <%doc>
+
 <%call 
-  expr="message(textcolor='red', textsize='36pt', left='50px', top='180px')">
+  expr="message(left='50px', top='180px', textsize='36pt', textcolor='red')">
 Department Pizza Lunch Friday!<br />
 <div style="font-size: 15pt;">Engineering Computing Students &amp; Faculty
 Invited, Bldg 52 FORUM, 12:30pm</div>
 </%call>
 
-${placed_image(image='pizza_slice_256.png', 
-                     width='200px', left='980px', top='20px')}
+${placed_image(width='200px', left='980px', top='20px', 
+               image='pizza_slice_256.png')}
 
 
-                'http://www.cranfield.ac.uk/~toby.breckon/amac_sign/frames.txt',
 </%doc>
 
-${schedule(width='880px', height='640px', left='50px', top='260px')}
+<%doc>'6ciph13spq4rmq28shlai1s83s@group.calendar.google.com'];</%doc>
+${schedule(width='880px', height='640px', left='50px', top='260px',
+           apiKey=meta['google_apikey'], calIdList=[ 
+             'amac.cranfield@googlemail.com',
+             'p2t1d9qvbg69lq59klqng5dc6s@group.calendar.google.com',
+             'ls6tjllu1ko99fl9j3vm1kpmio@group.calendar.google.com',
+             'e85187a6fn6jc818bp9mphgpmk@group.calendar.google.com',
+             'hhn8pbbqdhur0r7pq1vh1m31m8@group.calendar.google.com'],
+           ignoreTitleList=[ 'seminar slot', 'to be decided', 'tbd' ],
+           maxDays=7, maxResults=20, 
+           dataRefreshSeconds=600, layoutRefreshSeconds=10)}
 
 ${weather(width='640px', left='50px', top='900px')}
 

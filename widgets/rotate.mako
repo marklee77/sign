@@ -1,5 +1,12 @@
 <%def name="rotate(width, height, left, top, pagesets, seconds)">
 
+    <%doc>
+        FIXME:
+            add frames reload while keeping no-repeat guarnantee
+            handle frame load failure by trying again, not fading in
+            frameLoadStarted, bottomFrameReady, timeToRotate
+    </%doc>
+
     <% 
         import os
         frameIds = [] 
@@ -68,4 +75,5 @@
 
     });
     </script>
+
 </%def>
