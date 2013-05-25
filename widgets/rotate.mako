@@ -66,34 +66,50 @@
             if (bottomFrameReady) {
                 bottomToFront();
             }
-            setTimeout(doRotate, ${seconds}*1000);
         }
 
-        function frameLoadHandler () {
+        function frameLoadHandler() {
+
             if (!bottomFrameUrlSelected) return; // ignore startup events
+
             bottomFrameReady = true; 
+
             if (timeToRotate) {
                 bottomToFront();
             }
+
             if (!rotationStarted) {
                 rotationStarted = true;
+                setInterval(doRotate, ${seconds}*1000);
                 doRotate();
             }
+
         }
 
         frames[0].load(frameLoadHandler)
         frames[1].load(frameLoadHandler)
 
         function selectBottomFrameUrl() {
-            if (!bottomFrameUrlSelected) {
-                bottomFrameUrlSelected = true;
-                nextUrl = lastUrl;
-                while (nextUrl == lastUrl) {
-                    nextUrl = urls[Math.floor(Math.random() * urls.length)];
-                }
-                frames[frameIdx].attr('src', 
-                  nextUrl + '?now=' + (new Date()).getTime());
+
+            /*
+             * do not run if...
+             *  - function has already been called 
+             *  - there are no urls to choose from
+             *  - there is only one url and it is the same as the last one
+             */
+            if (bottomFrameUrlSelected) return;
+            if (urls.length < 1) return; 
+            if (urls.length < 2 && urls[0] == lastUrl) return;
+
+            bottomFrameUrlSelected = true;
+
+            nextUrl = lastUrl;
+            while (nextUrl == lastUrl) {
+                nextUrl = urls[Math.floor(Math.random() * urls.length)];
             }
+
+            frames[frameIdx].attr('src', 
+              nextUrl + '?now=' + (new Date()).getTime());
         }
 
         function pagesetLoadHandler(text) {
@@ -109,7 +125,7 @@
         function loadBottomFrame() {
             pagesetLoadCount = 0;
             bottomFrameUrlSelected = false;
-            urls.length = 0;
+            urls.length = 0; // is this a good way to clear an array?
             for(var i = 0; i < pagesets.length; i++) 
                 $.get(pagesets[i], pagesetLoadHandler);
         }
