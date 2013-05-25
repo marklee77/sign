@@ -45,6 +45,8 @@
         var bottomFrameUrlSelected = false;
         var bottomFrameReady = false;
         var timeToRotate = false;
+        var pagesetLoadCount = 0;
+        var pagesetFailCount = 0;
 
         function bottomToFront() {
             var bottomFrame = frames[frameIdx];
@@ -122,12 +124,23 @@
             }
         }
 
+        function pagesetFailHandler() {
+            pagesetFailCount++;
+            if (pagesetFailCount == pagesets.length) {
+                setTimeout(loadBottomFrame, 5000); 
+            }
+        }
+    
+
         function loadBottomFrame() {
             pagesetLoadCount = 0;
+            pagesetFailCount = 0;
             bottomFrameUrlSelected = false;
             urls.length = 0; // is this a good way to clear an array?
             for(var i = 0; i < pagesets.length; i++) 
-                $.get(pagesets[i], pagesetLoadHandler);
+                $.get(pagesets[i])
+                  .done(pagesetLoadHandler)
+                  .fail(pagesetFailHandler);
         }
 
         loadBottomFrame();
