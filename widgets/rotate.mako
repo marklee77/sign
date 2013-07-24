@@ -105,10 +105,11 @@
 
             bottomFrameUrlSelected = true;
 
-            nextUrl = lastUrl;
+            var nextUrl = lastUrl;
             while (nextUrl == lastUrl) {
                 nextUrl = urls[Math.floor(Math.random() * urls.length)];
             }
+            lastUrl = nextUrl;
 
             frames[frameIdx].attr('src', 
               nextUrl + '?now=' + (new Date()).getTime());
