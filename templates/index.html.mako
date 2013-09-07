@@ -31,7 +31,7 @@ ${schedule(width='880px', height='640px', left='50px', top='260px',
              'e85187a6fn6jc818bp9mphgpmk@group.calendar.google.com',
              'hhn8pbbqdhur0r7pq1vh1m31m8@group.calendar.google.com'],
            ignoreTitleList=[ 'seminar slot', 'to be decided', 'tbd' ],
-           maxDays=7, maxResults=20, 
+           maxDays=14, maxResults=20, 
            dataRefreshSeconds=600, layoutRefreshSeconds=10)}
 
 ${weather(width='640px', left='50px', top='900px')}
