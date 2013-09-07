@@ -30,7 +30,7 @@
         var layoutRefreshMs = ${layoutRefreshSeconds}*1000;
       
         var scheduleTable = document.getElementById('${scheduleId}');
-        var eventList = [];
+        var eventLists = new Array();
 
         function Event(item) {
             this.summary = item.summary;
@@ -80,34 +80,6 @@
             return 0;
         }
 
-        function updateEventList(newEventList) {
-            var updatedEventList = [];
-            var now = new Date();
-            var i = 0, j = 0;
-            while (i < eventList.length && j < newEventList.length) {
-
-                // skip old events
-                while(i < eventList.length && eventList[i].endDateTime < now) 
-                    i++;
-                if (i >= eventList.length) break;
-
-                // pick a new event to add
-                compVal = compareEvents(eventList[i], newEventList[j]);
-                if (-1 == compVal) {
-                    updatedEventList.push(eventList[i++]);
-                } else if (1 == compVal) { 
-                    updatedEventList.push(newEventList[j++]);
-                } else {
-                    updatedEventList.push(eventList[i++]);
-                    j++;
-                }
-            }
-            while (i < eventList.length) updatedEventList.push(eventList[i++]);
-            while (j < newEventList.length) 
-                updatedEventList.push(newEventList[j++]);
-            eventList = updatedEventList;
-        }
-
         function dateFormat(dateTime) {
 
             //return dateTime.toLocaleDateString();
@@ -143,6 +115,30 @@
             return hours + ':' + minutes + ampm;
         }
 
+        // FIXME: there is probably a cleaner way to do this with a library
+        function mergeEventLists() {
+            var mergeList = [];
+            var eventList = [];
+
+            for(var calId in eventLists) {
+                mergeList = mergeList.concat(eventLists[calId]);
+            }
+
+            mergeList.sort(compareEvents);
+
+            lastItem = null;
+            for(var i = 0; i < mergeList.length; i++) {
+                currItem = mergeList[i];
+                if (null == lastItem || 0 != compareEvents(lastItem, currItem)) {
+                    eventList.push(currItem);
+                    lastItem = currItem;
+                }
+            }
+
+            return eventList; 
+        }
+
+        // FIXME: this could be made a little more modular/less repetitive.
         function layoutEvents() {
             var now = new Date();
 
@@ -153,6 +149,8 @@
             // insert events
             var prevStartDateString = '';
             var prevEndDateString = '';     
+
+            var eventList = mergeEventLists();
         
             for(var i = 0; i < eventList.length; i++) {
                 var e = eventList[i];
@@ -250,8 +248,7 @@
                         }
                     }
                 }
-                newEventList.sort(compareEvents);
-                updateEventList(newEventList);
+                eventLists[calId] = newEventList;
                 layoutEvents();
             });
         }
