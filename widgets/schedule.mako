@@ -207,8 +207,14 @@
                 locationCell.setAttribute('style', 
                   'width: 350px; padding: 0 10px 1px 0; vertical-align: top;');
                 if (e.location) {
-                    var locationText = document.createTextNode(e.location);
-                    locationCell.appendChild(locationText);
+                    //var locationText = document.createTextNode(e.location);
+                    //locationCell.appendChild(locationText);
+                    // FIXME: hardcoded value...
+                    var location = e.location;
+                    if (location.length > 30) {
+                        location = location.replace(/,/, ',<br />');
+                    }
+                    locationCell.innerHTML = location;
                 }
                 eventRow.appendChild(locationCell);
                 scheduleTable.appendChild(eventRow);
