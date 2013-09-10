@@ -99,26 +99,16 @@
 
         }
 
-        // FIXME: replace with localeTimeString?
         function timeFormat(dateTime) {
 
-            return dateTime.toLocaleTimeString();
-            
             var hours = dateTime.getHours();
             var minutes = dateTime.getMinutes();
-            var ampm = (hours < 12) ? "am" : "pm";
-
-            if (0 == hours) {
-                hours = 12;
-            } else if (hours > 12) {
-                hours -= 12;
-            }
 
             if (minutes < 10) {
                 minutes = '0' + minutes
             }
 
-            return hours + ':' + minutes + ampm;
+            return hours + ':' + minutes;
         }
 
         // FIXME: there is probably a cleaner way to do this with a library
@@ -209,7 +199,8 @@
                 var summaryCell = document.createElement('td');
                 summaryCell.setAttribute('style', 
                   'width: 350px; padding: 0 10px 1px 0; vertical-align: top;');
-                var summaryText = document.createTextNode(e.summary)
+                var summaryText = 
+                    document.createTextNode(e.summary);
                 summaryCell.appendChild(summaryText);
                 eventRow.appendChild(summaryCell);
                 var locationCell = document.createElement('td'); 
