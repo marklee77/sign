@@ -4,7 +4,6 @@
     <%
       import os
       scheduleId = os.urandom(16).encode('hex')
-      handlerId = os.urandom(16).encode('hex')
     %>
  
     <table id='${scheduleId}' style="
@@ -13,7 +12,7 @@
     />
 
     <script>
-    function f${handlerId}() {
+    function f${scheduleId}() {
         gapi.client.setApiKey('${apiKey}');
         var calIdList = new Array();
         % for calId in calIdList:
@@ -87,8 +86,6 @@
         }
 
         function dateFormat(dateTime) {
-
-            //return dateTime.toLocaleDateString();
 
             var months = [ "January", "February", "March", "April", "May", 
                            "June", "July", "August", "September", "October", 
@@ -207,8 +204,6 @@
                 locationCell.setAttribute('style', 
                   'width: 350px; padding: 0 10px 1px 0; vertical-align: top;');
                 if (e.location) {
-                    //var locationText = document.createTextNode(e.location);
-                    //locationCell.appendChild(locationText);
                     // FIXME: hardcoded value...
                     var location = e.location;
                     if (location.length > 30) {
@@ -268,6 +263,6 @@
         setInterval(layoutEvents, layoutRefreshMs);
     }
     </script>
-    <script src="https://apis.google.com/js/client.js?onload=f${handlerId}"
+    <script src="https://apis.google.com/js/client.js?onload=f${scheduleId}"
         ></script>
 </%def>
