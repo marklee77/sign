@@ -13,7 +13,7 @@
 
     <script>
     function f${scheduleId}() {
-        gapi.client.setApiKey('${apiKey}');
+
         var calIdList = new Array();
         % for calId in calIdList:
             calIdList.push('${calId}');
@@ -31,7 +31,9 @@
         var scheduleTable = document.getElementById('${scheduleId}');
         var eventLists = new Array();
 
-        function Event(item) {
+        gapi.client.setApiKey('${apiKey}');
+
+        var Event = function(item) {
             this.summary = item.summary;
             if (item.location) {
                 this.location = item.location;
@@ -205,11 +207,14 @@
                   'width: 350px; padding: 0 10px 1px 0; vertical-align: top;');
                 if (e.location) {
                     // FIXME: hardcoded value...
-                    var location = e.location;
-                    if (location.length > 30) {
-                        location = location.replace(/,/, ',<br />');
+                    var loc = e.location;
+                    if (loc.length > 30) {
+                        p = loc.lastIndexOf(',') + 1;
+                        if (p > 0) {
+                            loc = loc.substring(0, p) + '<br />' + loc.substring(p);
+                        }
                     }
-                    locationCell.innerHTML = location;
+                    locationCell.innerHTML = loc;
                 }
                 eventRow.appendChild(locationCell);
                 scheduleTable.appendChild(eventRow);
