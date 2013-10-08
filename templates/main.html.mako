@@ -8,8 +8,8 @@
     </head>
     <body>
         <header>
-            <h1>Engineering Computing</h2>
-            <h2>Applied Mathematics &amp; Computing Group</h2> 
+            <h1>Engineering Sciences</h2>
+            <h2>Computational &amp; Software Techniques in Engineering</h2> 
             <img id="cranfield_logo" src="img/cranfield_logo.svg" 
                  alt="Cranfield University" />
         </header>

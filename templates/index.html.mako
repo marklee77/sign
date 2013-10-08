@@ -7,20 +7,16 @@
 <%namespace file="rotate.mako"   import="rotate"       />
 <%namespace file="clock.mako"    import="clock"        />
 
-<%doc>
-
 <%call 
-  expr="message(left='50px', top='180px', textsize='36pt', textcolor='red')">
-Department Pizza Lunch Friday!<br />
-<div style="font-size: 15pt;">Engineering Computing Students &amp; Faculty
-Invited, Bldg 52 FORUM, 12:30pm</div>
+  expr="message(width='880px', left='50px', top='180px', textsize='36pt', textcolor='red')">
+Pizza Lunch Friday!<br />
+<div style="font-size: 15pt;">CSTE Students &amp; Faculty Invited, 
+Bldg 52 FORUM, 4:30pm</div>
 </%call>
 
-${placed_image(width='200px', left='980px', top='20px', 
+${placed_image(width='200px', left='900px', top='20px', 
                image='pizza_slice_256.png')}
 
-
-</%doc>
 
 <%doc>'6ciph13spq4rmq28shlai1s83s@group.calendar.google.com'];</%doc>
 ${schedule(width='880px', height='640px', left='50px', top='260px',
@@ -30,7 +26,8 @@ ${schedule(width='880px', height='640px', left='50px', top='260px',
              'ls6tjllu1ko99fl9j3vm1kpmio@group.calendar.google.com',
              'e85187a6fn6jc818bp9mphgpmk@group.calendar.google.com',
              'hhn8pbbqdhur0r7pq1vh1m31m8@group.calendar.google.com'],
-           ignoreTitleList=[ 'seminar slot', 'to be decided', 'tbd' ],
+           ignoreTitleList=[ 'seminar slot', 'to be decided', 'tbd', 
+                             'assignment work' ],
            maxDays=14, maxResults=20, 
            dataRefreshSeconds=600, layoutRefreshSeconds=10)}
 
