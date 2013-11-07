@@ -7,6 +7,7 @@
 <%namespace file="rotate.mako"   import="rotate"       />
 <%namespace file="clock.mako"    import="clock"        />
 
+<%doc>
 <%call 
   expr="message(width='880px', left='50px', top='180px', textsize='36pt', textcolor='red')">
 Pizza Lunch Friday!<br />
@@ -16,6 +17,7 @@ Bldg 52 FORUM, 4:30pm</div>
 
 ${placed_image(width='200px', left='900px', top='20px', 
                image='pizza_slice_256.png')}
+</%doc>
 
 
 <%doc>'6ciph13spq4rmq28shlai1s83s@group.calendar.google.com'];</%doc>

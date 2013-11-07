@@ -14,6 +14,6 @@
                  alt="Cranfield University" />
         </header>
         ${next.body()}
-        <footer>http://www.cranfield.ac.uk/soe/amac/</footer>
+        <footer>http://www.cranfield.ac.uk/</footer>
     </body>
 </html>
