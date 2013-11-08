@@ -1,12 +1,13 @@
 !/bin/sh
 
 echo
-echo "**** Pulling changes into Live [Hub's post-update hook]"
+echo "**** Pulling changes into Live ****"
 echo
 
-cd /home/marklee/Scratch/githook/sign || exit
+cd ${HOME}/sign || exit
 unset GIT_DIR
 git pull origin master
 ./build.sh
+ffrestart.sh
 
 exec git-update-server-info
