@@ -45,6 +45,5 @@ ${rotate(width='840px', height='650px', left='950px', top='235px',
                 seconds='30'
 )}
 
-
 ${clock(width='840px', left='950px', top='900px', 
         textsize='36pt', textcolor='#9a9b9c')}

@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <meta http-equiv="refresh" content="7200" />
         <link rel="stylesheet" href="css/default.css" />
         <link rel="stylesheet" href="css/main.css" />
         <script src="js/jquery-2.0.0.min.js"></script> 

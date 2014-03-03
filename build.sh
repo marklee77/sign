@@ -1,7 +1,7 @@
 #!/bin/bash 
 mkdir -m 755 -p deploy
-rsync -pr static/ deploy/
-rsync -pr private/ deploy/
+#rsync -pr static/ deploy/
+#rsync -pr private/ deploy/
 umask 133
 template-render -d ./templates:./widgets -t index.html.mako -m ./private.yaml \
     -o ./deploy/index.html
