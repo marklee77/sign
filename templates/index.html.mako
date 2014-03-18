@@ -41,6 +41,7 @@ ${rotate(width='840px', height='650px', left='950px', top='235px',
                 'rotate/breckon/frames.txt',
                 'rotate/gourma/frames.txt',
                 'rotate/jenkins/frames.txt',
+                'rotate/sawko/frames.txt',
                 'rotate/stillwell/frames.txt'], 
                 seconds='30'
 )}
